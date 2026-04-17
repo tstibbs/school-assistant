@@ -1,0 +1,12 @@
+{
+	"projects": [
+		{
+			"displayName": "unit",
+			"testMatch": ["**/?(*.)test.?([mc])[jt]s?(x)"]
+		},
+		{
+			"displayName": "cdk",
+			"testMatch": ["**/?(*.)cdktest.?([mc])[jt]s?(x)"]
+		}
+	]
+}

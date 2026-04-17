@@ -24,8 +24,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: test preparation
-        run: cp config-example.yaml config.yaml
+        run: |
+          cp config-example.yaml config.yaml
+          cp .env.dummy .env
 
-      - run: pnpm test
+      - run: pnpm run test:ci
       
 # don't run the actual deploy in the CI, but run everything up to here to get the best idea of whether it works
