@@ -31,7 +31,10 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
-			"@tstibbs/cloud-core-utils"
+			"@tstibbs/cloud-core-utils",
+			"esbuild",
+			"husky",
+			"unrs-resolver"
 		]
 	},
 	"scripts": {

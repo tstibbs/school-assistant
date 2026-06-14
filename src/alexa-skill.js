@@ -17,6 +17,18 @@ async function loadQueryService() {
 	return queryService
 }
 
+const respondWithInfo = (handlerInput, speech) => {
+	const escapedSpeech = speech
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;')
+	const response = handlerInput.responseBuilder.speak(escapedSpeech).withShouldEndSession(true).getResponse()
+	console.log(response)
+	return response
+}
+
 /**
  * Handler for the GetEventsByDateIntent
  * Triggered by: "What is happening on {eventDate}"
@@ -35,7 +47,7 @@ const GetEventsByDateIntentHandler = {
 			throw new Error(`'${data}' is not a valid date, expected ISO 8601 format (YYYY-MM-DD)`)
 		}
 		const speechOutput = await queryService.dateQuery(date)
-		return handlerInput.responseBuilder.speak(speechOutput).withShouldEndSession(true).getResponse()
+		return respondWithInfo(handlerInput, speechOutput)
 	}
 }
 
@@ -57,7 +69,7 @@ const GetEventByNameIntentHandler = {
 			throw new Error(`No 'eventName' provided.`)
 		}
 		const speechOutput = await queryService.searchQuery(eventName)
-		return handlerInput.responseBuilder.speak(speechOutput).withShouldEndSession(true).getResponse()
+		return respondWithInfo(handlerInput, speechOutput)
 	}
 }
 
