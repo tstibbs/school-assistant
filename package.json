@@ -41,6 +41,7 @@
 		"preinstall": "git config core.hooksPath .project/hooks",
 		"test:unit": "node --experimental-vm-modules --nolazy ./node_modules/jest/bin/jest.js --selectProjects unit",
 		"test:cdk": "node --experimental-vm-modules --nolazy ./node_modules/jest/bin/jest.js --selectProjects cdk",
-		"test:ci": "pnpm run test:unit && pnpm run test:cdk"
+		"test:ci": "pnpm run test:unit && pnpm run test:cdk",
+		"deploy": "pnpm exec cdk-tools diffploy"
 	}
 }
