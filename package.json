@@ -24,7 +24,7 @@
 		"aws-cdk": "2.1126.0",
 		"aws-cdk-lib": "2.258.1",
 		"esbuild": "^0.25.5",
-		"husky": "^4.2.5",
+		"husky": "^9.1.7",
 		"jest": "^30.2.0",
 		"lint-staged": "^16.1.0",
 		"prettier": "^3.5.3"
@@ -38,10 +38,10 @@
 		]
 	},
 	"scripts": {
-		"preinstall": "git config core.hooksPath .project/hooks",
 		"test:unit": "node --experimental-vm-modules --nolazy ./node_modules/jest/bin/jest.js --selectProjects unit",
 		"test:cdk": "node --experimental-vm-modules --nolazy ./node_modules/jest/bin/jest.js --selectProjects cdk",
 		"test:ci": "pnpm run test:unit && pnpm run test:cdk",
-		"deploy": "pnpm exec cdk-tools diffploy"
+		"deploy": "pnpm exec cdk-tools diffploy",
+		"prepare": "husky .config/husky"
 	}
 }
