@@ -108,22 +108,6 @@ To allow AWS CDK to register and update the Alexa skill on your behalf, you must
 
 Create a `.env` file in the root of the project using the template from `.env.dummy`:
 
-```env
-STACK_NAME=school-calendar
-UPLOAD_AUTH_PASSWORD=your-secure-upload-password-here
-NOTIFICATION_EMAIL=your-email@example.com
-BANNED_REGIONS=eu-*,ap-*
-
-# Alexa Developer Credentials
-ALEXA_VENDOR_ID=your-alexa-vendor-id
-ALEXA_CLIENT_ID=amzn1.application-oa2-client.your-client-id
-ALEXA_CLIENT_SECRET=amzn1.oa2-cs.v1.your-client-secret
-ALEXA_REFRESH_TOKEN=your-refresh-token
-
-# Initially leave AMZN_SKILL_ID blank. You will update this after the first deploy.
-AMZN_SKILL_ID=
-```
-
 - **`UPLOAD_AUTH_PASSWORD`**: A secure token of your choice. It will be verified by a CloudFront Function on every PDF upload.
 - **`NOTIFICATION_EMAIL`**: The email address where you want to receive SNS alert notifications if a Lambda execution fails.
 - **`BANNED_REGIONS`**: Region wildcard patterns to restrict AWS Bedrock model invocation permissions (to prevent usage in undesired jurisdictions).
