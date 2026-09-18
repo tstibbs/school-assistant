@@ -1,7 +1,8 @@
 import {query} from './integration/bedrock.js'
 import {Reader} from './database/reader.js'
-import {QUERY_CONFIG} from './config.js'
+import {INPUTS, QUERY_CONFIG} from './config.js'
 
+const MULTI_INPUT = Object.keys(INPUTS).length > 1
 const listFormatter = new Intl.ListFormat('en', {style: 'long', type: 'conjunction'})
 
 export class QueryService {
@@ -51,6 +52,7 @@ export class QueryService {
 				acc[inputId][description].push(event)
 				return acc
 			}, {})
+			const hasMultiInputs = MULTI_INPUT || Object.entries(groupedData).length > 1
 			const summaries = Object.entries(groupedData)
 				.flatMap(([inputId, descriptions]) => {
 					return Object.entries(descriptions).map(([description, events]) => {
@@ -60,7 +62,8 @@ export class QueryService {
 							.map(e => `starting ${formatDateForSpeech(e.startDate)}`)
 						const dates = [...singleDates, ...dateRanges].join(', ')
 						const joiner = singleDates.length == 0 ? 'on ' : ''
-						return `${description} ${joiner}${dates} at ${inputId}`
+						const inputAddition = hasMultiInputs ? ` at ${inputId}` : ''
+						return `${description} ${joiner}${dates}${inputAddition}`
 					})
 				})
 				.join('. ')
@@ -84,10 +87,12 @@ export class QueryService {
 				acc[inputId][description] = event
 				return acc
 			}, {})
+			const hasMultiInputs = MULTI_INPUT || Object.entries(groupedData).length > 1
 			const descriptions = Object.entries(groupedData)
 				.flatMap(([inputId, descriptions]) => {
 					const descriptionText = listFormatter.format(Object.keys(descriptions))
-					return `${descriptionText} at ${inputId}`
+					const inputAddition = hasMultiInputs ? ` at ${inputId}` : ''
+					return `${descriptionText}${inputAddition}`
 				})
 				.join('. ')
 			return descriptions
