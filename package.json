@@ -1,10 +1,17 @@
 {
 	"name": "@tstibbs/school-assistant",
 	"private": true,
-	"engines": {
-		"node": ">=22",
-		"pnpm": ">=10",
-		"npm": ">=9999.project-does-not-support-npm"
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"version": "22",
+			"onFail": "error"
+		},
+		"packageManager": {
+			"name": "pnpm",
+			"version": ">=11.7",
+			"onFail": "error"
+		}
 	},
 	"type": "module",
 	"dependencies": {
@@ -28,15 +35,6 @@
 		"jest": "^30.5.2",
 		"lint-staged": "^17.5.1",
 		"prettier": "^3.9.8"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@parcel/watcher",
-			"@tstibbs/cloud-core-utils",
-			"esbuild",
-			"husky",
-			"unrs-resolver"
-		]
 	},
 	"scripts": {
 		"test:unit": "node --experimental-vm-modules --nolazy ./node_modules/jest/bin/jest.js --selectProjects unit",
