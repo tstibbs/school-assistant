@@ -8,29 +8,30 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@aws-sdk/client-bedrock-runtime": "^3.996.0",
-		"@aws-sdk/client-s3": "^3.996.0",
-		"@aws-sdk/client-sns": "^3.1018.0",
-		"@thednp/dommatrix": "^3.0.2",
+		"@aws-sdk/client-bedrock-runtime": "^3.1136.0",
+		"@aws-sdk/client-s3": "^3.1136.0",
+		"@aws-sdk/client-sns": "^3.1136.0",
+		"@thednp/dommatrix": "^3.1.2",
 		"@tstibbs/cloud-core-utils": "github:tstibbs/cloud-core#path:/aws/utils",
 		"ask-sdk-core": "^2.14.0",
-		"constructs": "^10.5.1",
+		"constructs": "^10.8.1",
 		"dotenv": "^16.6.1",
-		"js-yaml": "^4.1.1",
-		"lodash-es": "^4.17.23",
+		"js-yaml": "^5.4.2",
+		"lodash-es": "^4.18.1",
 		"pdfjs-dist": "^5.5.207"
 	},
 	"devDependencies": {
-		"aws-cdk": "2.1126.0",
-		"aws-cdk-lib": "2.258.1",
-		"esbuild": "^0.25.5",
+		"aws-cdk": "2.1142.0",
+		"aws-cdk-lib": "2.270.0",
+		"esbuild": "^0.28.2",
 		"husky": "^9.1.7",
-		"jest": "^30.2.0",
-		"lint-staged": "^16.1.0",
-		"prettier": "^3.5.3"
+		"jest": "^30.5.2",
+		"lint-staged": "^17.5.1",
+		"prettier": "^3.9.8"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"@parcel/watcher",
 			"@tstibbs/cloud-core-utils",
 			"esbuild",
 			"husky",
