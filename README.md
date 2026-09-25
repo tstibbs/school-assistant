@@ -65,19 +65,7 @@ flowchart TD
 
 Create a `config.yaml` file in the root directory. You can use `config-example.yaml` as a reference.
 
-This file defines the schools/inputs you want to track:
-
-```yaml
-inputs:
-  school1: # Give a sensible real name (e.g. 'infants', 'eton', or perhaps a person's name)
-    extraction:
-      promptId: newsletter # Reference by name one of the prompts, either from config-defaults.yaml or add a new prompt
-    aliases: # List of other ways the school might be referred to (e.g. by school name or by the name of the child attending)
-      - alias1
-      - alias2
-  #school2:
-  # etc
-```
+This file defines the schools/inputs you want to track.
 
 > **Note:** The input keys (e.g., `school1`) are used as path parameters for uploads. The files will be uploaded to `<uploadEndpoint>/<inputId>/input.pdf`.
 

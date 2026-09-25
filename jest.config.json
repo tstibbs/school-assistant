@@ -2,11 +2,13 @@
 	"projects": [
 		{
 			"displayName": "unit",
-			"testMatch": ["**/?(*.)test.?([mc])[jt]s?(x)"]
+			"testMatch": ["**/?(*.)test.?([mc])[jt]s?(x)"],
+			"testPathIgnorePatterns": ["cdk\\.out"]
 		},
 		{
 			"displayName": "cdk",
-			"testMatch": ["**/?(*.)cdktest.?([mc])[jt]s?(x)"]
+			"testMatch": ["**/?(*.)cdktest.?([mc])[jt]s?(x)"],
+			"testPathIgnorePatterns": ["cdk\\.out"]
 		}
 	]
 }

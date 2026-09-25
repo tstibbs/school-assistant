@@ -7,8 +7,8 @@ const MAX_TOKENS = 2000
 const client = new BedrockRuntimeClient()
 
 export async function extractEventsFromText(inputId, fileText) {
-	const {promptId} = INPUTS[inputId].extraction
-	const {text: promptText, modelId} = PROMPTS[promptId]
+	const {extractorId} = INPUTS[inputId].extraction
+	const {text: promptText, modelId} = PROMPTS[extractorId]
 	const conversation = [
 		{
 			role: 'user',
@@ -35,8 +35,8 @@ export async function extractEventsFromText(inputId, fileText) {
 }
 
 export async function extractEventsFromPdf(inputId, fileBody) {
-	const {promptId} = INPUTS[inputId].extraction
-	const {text, modelId} = PROMPTS[promptId]
+	const {extractorId} = INPUTS[inputId].extraction
+	const {text, modelId} = PROMPTS[extractorId]
 	const conversation = [
 		{
 			role: 'user',

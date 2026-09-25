@@ -5,12 +5,13 @@ describe('Config validation', () => {
 	const validConfig = {
 		inputs: {
 			school1: {
-				extraction: {promptId: 'newsletter'},
+				extraction: {extractorId: 'newsletter'},
 				aliases: ['alias1']
 			}
 		},
-		prompts: {
+		extractors: {
 			newsletter: {
+				type: 'llm',
 				modelId: 'eu.anthropic.claude-sonnet-4-6',
 				text: 'Extract events from file'
 			}
@@ -26,41 +27,41 @@ describe('Config validation', () => {
 		expect(() => validateConfig(config)).toThrow('inputs cannot be empty')
 	})
 
-	it('rejects missing prompts object', () => {
-		const config = {...validConfig, prompts: undefined}
+	it('rejects missing extractors object', () => {
+		const config = {...validConfig, extractors: undefined}
 		expect(() => validateConfig(config)).toThrow('Config validation failed')
 	})
 
 	it('rejects prompt without modelId', () => {
 		const config = {
-			inputs: {school1: {extraction: {promptId: 'newsletter'}}},
-			prompts: {newsletter: {text: 'Extract events'}}
+			inputs: {school1: {extraction: {extractorId: 'newsletter'}}},
+			extractors: {newsletter: {text: 'Extract events'}}
 		}
 		expect(() => validateConfig(config)).toThrow('Config validation failed')
 	})
 
 	it('rejects prompt without text', () => {
 		const config = {
-			inputs: {school1: {extraction: {promptId: 'newsletter'}}},
-			prompts: {newsletter: {modelId: 'claude-sonnet-4-6'}}
+			inputs: {school1: {extraction: {extractorId: 'newsletter'}}},
+			extractors: {newsletter: {type: 'llm', modelId: 'claude-sonnet-4-6'}}
 		}
 		expect(() => validateConfig(config)).toThrow('Config validation failed')
 	})
 
-	it('rejects undefined promptId reference', () => {
+	it('rejects undefined extractorId reference', () => {
 		const config = {
-			inputs: {school1: {extraction: {promptId: 'nonexistent'}}},
-			prompts: {newsletter: {modelId: 'claude', text: 'text'}}
+			inputs: {school1: {extraction: {extractorId: 'nonexistent'}}},
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
 		}
-		expect(() => validateConfig(config)).toThrow('promptIds were referenced but not defined')
+		expect(() => validateConfig(config)).toThrow('The following promptIds were referenced but not defined: nonexistent')
 	})
 
 	it('rejects invalid input names', () => {
 		const config = {
 			inputs: {
-				'invalid@name': {extraction: {promptId: 'newsletter'}}
+				'invalid@name': {extraction: {extractorId: 'newsletter'}}
 			},
-			prompts: {newsletter: {modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
 		}
 		expect(() => validateConfig(config)).toThrow('invalid format')
 	})
@@ -68,10 +69,10 @@ describe('Config validation', () => {
 	it('accepts valid input names with underscores and hyphens', () => {
 		const config = {
 			inputs: {
-				school_1: {extraction: {promptId: 'newsletter'}},
-				'school-2': {extraction: {promptId: 'newsletter'}}
+				school_1: {extraction: {extractorId: 'newsletter'}},
+				'school-2': {extraction: {extractorId: 'newsletter'}}
 			},
-			prompts: {newsletter: {modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
 		}
 		expect(() => validateConfig(config)).not.toThrow()
 	})
@@ -80,11 +81,11 @@ describe('Config validation', () => {
 		const config = {
 			inputs: {
 				school1: {
-					extraction: {promptId: 'newsletter'},
+					extraction: {extractorId: 'newsletter'},
 					aliases: ['alias1', 'alias2']
 				}
 			},
-			prompts: {newsletter: {modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
 		}
 		expect(() => validateConfig(config)).not.toThrow()
 	})

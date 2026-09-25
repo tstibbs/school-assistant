@@ -1,5 +1,6 @@
-prompts:
+extractors:
   newsletter:
+    type: llm
     modelId: eu.anthropic.claude-sonnet-4-6
     text: |
       Task: Extract Date and Event Information from a File
@@ -22,6 +23,7 @@ prompts:
       5. Return only the JSON data, with no extra text.
       6. Do not wrap the output in markdown tags.
   table:
+    type: llm
     modelId: eu.anthropic.claude-sonnet-4-6
     text: |
       Task: Extract Date and Event Information from a File

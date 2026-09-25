@@ -3,25 +3,27 @@ import {load} from 'js-yaml'
 import {merge} from 'lodash-es'
 import {z} from 'zod'
 
+const llmExtractorSchema = z.object({
+	type: z.literal('llm'),
+	modelId: z.string(),
+	text: z.string()
+})
+
+const extractorSchema = z.union([llmExtractorSchema])
+
 const configSchema = z.object({
 	inputs: z
 		.record(
 			z.string(),
 			z.object({
 				extraction: z.object({
-					promptId: z.string()
+					extractorId: z.string()
 				}),
 				aliases: z.array(z.string()).optional()
 			})
 		)
 		.refine(obj => Object.keys(obj).length > 0, 'inputs cannot be empty'),
-	prompts: z.record(
-		z.string(),
-		z.object({
-			modelId: z.string(),
-			text: z.string()
-		})
-	),
+	extractors: z.record(z.string(), extractorSchema),
 	query: z
 		.object({
 			modelId: z.string(),
@@ -56,10 +58,10 @@ export function validateConfig(config) {
 		throw new Error(`The following input names are in an invalid format: ${nonMatches.join(', ')}`)
 	}
 
-	// Validate all referenced promptIds are defined
+	// Validate all referenced extractorId are defined
 	const undefinedPrompts = Object.values(config.inputs)
-		.map(input => input.extraction.promptId)
-		.filter(promptId => !(promptId in config.prompts))
+		.map(input => input.extraction.extractorId)
+		.filter(extractorId => !(extractorId in config.extractors))
 	if (undefinedPrompts.length > 0) {
 		throw new Error(`The following promptIds were referenced but not defined: ${undefinedPrompts.join(', ')}`)
 	}
@@ -68,5 +70,5 @@ export function validateConfig(config) {
 export const config = loadConfig()
 export const INPUTS = config.inputs
 export const QUERY_CONFIG = config.query
-export const PROMPTS = config.prompts
+export const PROMPTS = config.extractors
 export const CONFIG = config.config
