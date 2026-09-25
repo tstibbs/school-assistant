@@ -1,42 +1,16 @@
 import {createHash} from 'node:crypto'
 
 import {S3Client, GetObjectCommand, PutObjectCommand} from '@aws-sdk/client-s3'
-import {buildErrorNotifyingLambdaHandler} from '@tstibbs/cloud-core-utils/src/utils/lambda.js'
 
-import {extractEventsFromPdf as aiPdfExtract, extractEventsFromText as aiTextExtract} from './integration/bedrock.js'
-import {updateAllData} from './database/writer.js'
-import {translateData} from './database/translate.js'
-import {extractText as dumbPdfExtract, countPages} from './formats/pdf.js'
-import {CONFIG} from './config.js'
+import {extractEventsFromPdf as aiPdfExtract, extractEventsFromText as aiTextExtract} from '../integration/bedrock.js'
+import {updateAllData} from '../database/writer.js'
+import {translateData} from '../database/translate.js'
+import {extractText as dumbPdfExtract, countPages} from '../formats/pdf.js'
+import {CONFIG} from '../config.js'
 
 const s3Client = new S3Client()
 
-async function handleEvent(event) {
-	const results = event.Records.map(async record => {
-		const bucket = record.s3.bucket.name
-		const key = decodeURIComponent(record.s3.object.key)
-
-		try {
-			await processOneObject(bucket, key)
-			console.log(`Successfully processed ${key}`)
-		} catch (err) {
-			console.error(`Error processing ${key}:`, err)
-			throw err
-		}
-	})
-	await Promise.all(results)
-}
-
-async function processOneObject(bucket, key) {
-	console.log(`Processing file: s3://${bucket}/${key}`)
-	const keyParts = key.split('/')
-	if (keyParts.length != 2) {
-		throw new Error(`Invalid key: ${key}`)
-	}
-	if (keyParts[1] != 'input.pdf') {
-		return
-	}
-	const inputId = keyParts[0]
+export async function processOneObject(inputId, bucket, key) {
 	const response = await s3Client.send(
 		new GetObjectCommand({
 			Bucket: bucket,
@@ -124,5 +98,3 @@ async function hashHasChanged(bucket, hashKey, incomingHash) {
 		}
 	}
 }
-
-export const handler = buildErrorNotifyingLambdaHandler('doc-extractor', handleEvent)

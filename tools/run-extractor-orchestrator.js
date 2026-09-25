@@ -4,7 +4,7 @@ dotenv.config()
 
 const {BUCKET_NAME} = process.env
 
-const {handler} = await import('../src/doc-extractor.js')
+const {handler} = await import('../src/extractor-orchestrator.js')
 
 async function run(inputId) {
 	await handler(
