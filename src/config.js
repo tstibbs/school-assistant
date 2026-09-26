@@ -8,8 +8,12 @@ const llmExtractorSchema = z.object({
 	modelId: z.string(),
 	text: z.string()
 })
+const jsonpathExtractorSchema = z.object({
+	type: z.literal('jsonpath'),
+	expression: z.string()
+})
 
-const extractorSchema = z.union([llmExtractorSchema])
+const extractorSchema = z.union([llmExtractorSchema, jsonpathExtractorSchema])
 
 const configSchema = z.object({
 	inputs: z

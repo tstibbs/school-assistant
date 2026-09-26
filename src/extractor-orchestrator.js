@@ -7,7 +7,8 @@ import {updateAllData} from './database/writer.js'
 import {CONFIG, INPUTS, PROMPTS} from './config.js'
 
 const extractors = {
-	llm: async () => (await import('./extractors/llm.js')).processOneObject
+	llm: async () => (await import('./extractors/llm.js')).processOneObject,
+	jsonpath: async () => (await import('./extractors/jsonpath.js')).findJsonPath
 }
 
 const s3Client = new S3Client()
@@ -66,7 +67,7 @@ async function processOneObject(bucket, key) {
 	let lastOutput = fileBody
 	for (const extractorConfig of extractorConfigs) {
 		const extractor = await extractors[extractorConfig.type]()
-		lastOutput = await extractor(inputId, lastOutput)
+		lastOutput = await extractor(extractorConfig, lastOutput)
 	}
 
 	//write this input's data

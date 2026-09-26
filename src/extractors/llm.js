@@ -3,17 +3,17 @@ import {translateData} from '../database/translate.js'
 import {extractText as dumbPdfExtract, countPages} from '../formats/pdf.js'
 import {CONFIG} from '../config.js'
 
-export async function processOneObject(inputId, fileBody) {
+export async function processOneObject(extractorConfig, fileBody) {
 	const pageCount = await countPages(fileBody)
 	let output
 	if (pageCount > CONFIG.pageLimitForAi) {
 		// pages cost around $0.01 per page in claude sonnet, so cost can add up quickly
 		console.log(`High page count (${pageCount}), so falling back to local text extract followed by AI text parsing`)
 		const pageText = await dumbPdfExtract(fileBody)
-		output = await aiTextExtract(inputId, pageText)
+		output = await aiTextExtract(extractorConfig, pageText)
 	} else {
 		console.log(`Low page count (${pageCount}), using full AI pdf parsing`)
-		output = await aiPdfExtract(inputId, fileBody)
+		output = await aiPdfExtract(extractorConfig, fileBody)
 	}
 	const data = translateData(output)
 
