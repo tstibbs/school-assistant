@@ -12,8 +12,11 @@ const jsonpathExtractorSchema = z.object({
 	type: z.literal('jsonpath'),
 	expression: z.string()
 })
+const downloadExtractorSchema = z.object({
+	type: z.literal('download')
+})
 
-const extractorSchema = z.union([llmExtractorSchema, jsonpathExtractorSchema])
+const extractorSchema = z.union([llmExtractorSchema, jsonpathExtractorSchema, downloadExtractorSchema])
 
 const configSchema = z.object({
 	inputs: z

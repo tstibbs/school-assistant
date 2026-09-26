@@ -8,7 +8,8 @@ import {CONFIG, INPUTS, PROMPTS} from './config.js'
 
 const extractors = {
 	llm: async () => (await import('./extractors/llm.js')).processOneObject,
-	jsonpath: async () => (await import('./extractors/jsonpath.js')).findJsonPath
+	jsonpath: async () => (await import('./extractors/jsonpath.js')).findJsonPath,
+	download: async () => (await import('./extractors/download.js')).downloadFromUrl
 }
 
 const s3Client = new S3Client()
