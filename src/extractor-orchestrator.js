@@ -62,20 +62,14 @@ async function processOneObject(bucket, key) {
 
 	console.log(`File hash changed for ${inputId}, proceeding with extraction`)
 
-	const input = INPUTS[inputId]
-	const extractorConfigs = [input.extraction.extractorId].map(extractorId => PROMPTS[extractorId])
-	let lastOutput = fileBody
-	for (const extractorConfig of extractorConfigs) {
-		const extractor = await extractors[extractorConfig.type]()
-		lastOutput = await extractor(extractorConfig, lastOutput)
-	}
+	const outputData = await runAllExtractors(inputId, fileBody)
 
 	//write this input's data
 	await s3Client.send(
 		new PutObjectCommand({
 			Bucket: bucket,
 			Key: `${inputId}/data.json`,
-			Body: JSON.stringify(lastOutput),
+			Body: JSON.stringify(outputData),
 			ContentType: 'application/json'
 		})
 	)
@@ -92,6 +86,18 @@ async function processOneObject(bucket, key) {
 			ContentType: 'text/plain'
 		})
 	)
+}
+
+//exported just for tests
+export async function runAllExtractors(inputId, inputData) {
+	const input = INPUTS[inputId]
+	const extractorConfigs = [input.extraction.extractorId].map(extractorId => PROMPTS[extractorId])
+	let lastOutput = inputData
+	for (const extractorConfig of extractorConfigs) {
+		const extractor = await extractors[extractorConfig.type]()
+		lastOutput = await extractor(extractorConfig, lastOutput)
+	}
+	return lastOutput
 }
 
 async function hashHasChanged(bucket, hashKey, incomingHash) {
