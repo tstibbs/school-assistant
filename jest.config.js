@@ -1,4 +1,4 @@
-process.env.ALERT_TOPIC ??= 'test-alert-topic'
+process.env.ALERTS_TOPIC ??= 'test-alert-topic'
 
 export default {
 	projects: [
