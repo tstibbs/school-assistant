@@ -4,7 +4,7 @@ import {S3Client, GetObjectCommand, PutObjectCommand} from '@aws-sdk/client-s3'
 import {buildErrorNotifyingLambdaHandler} from '@tstibbs/cloud-core-utils/src/utils/lambda.js'
 
 import {updateAllData} from './database/writer.js'
-import {CONFIG, INPUTS, PROMPTS} from './config.js'
+import {config} from './config.js'
 
 const extractors = {
 	llm: async () => (await import('./extractors/llm.js')).processOneObject,
@@ -91,8 +91,8 @@ async function processOneObject(bucket, key) {
 
 //exported just for tests
 export async function runAllExtractors(inputId, inputData) {
-	const input = INPUTS[inputId]
-	const extractorConfigs = [input.extraction.extractorId].map(extractorId => PROMPTS[extractorId])
+	const input = config.inputs[inputId]
+	const extractorConfigs = [input.extraction.extractorId].map(extractorId => config.extractors[extractorId])
 	let lastOutput = inputData
 	for (const extractorConfig of extractorConfigs) {
 		const extractor = await extractors[extractorConfig.type]()

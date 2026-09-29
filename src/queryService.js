@@ -1,8 +1,8 @@
 import {query} from './integration/bedrock.js'
 import {Reader} from './database/reader.js'
-import {INPUTS, QUERY_CONFIG} from './config.js'
+import {config} from './config.js'
 
-const MULTI_INPUT = Object.keys(INPUTS).length > 1
+const MULTI_INPUT = Object.keys(config.inputs).length > 1
 const listFormatter = new Intl.ListFormat('en', {style: 'long', type: 'conjunction'})
 
 export class QueryService {
@@ -23,7 +23,7 @@ export class QueryService {
 
 	async #queryBedrockForEventIds(userInput) {
 		const data = await this.#reader.getEventViewString()
-		const prompt = QUERY_CONFIG.text.replaceAll('${data}', data).replaceAll('${userInput}', userInput)
+		const prompt = config.query.prompt.replaceAll('${data}', data).replaceAll('${userInput}', userInput)
 		const response = await query(prompt)
 		console.log(`Response: ${response}`)
 		try {

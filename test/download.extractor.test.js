@@ -1,15 +1,16 @@
 import {describe, expect, it, jest} from '@jest/globals'
 
 jest.unstable_mockModule('../src/config.js', () => ({
-	CONFIG: {},
-	INPUTS: {
-		school1: {
-			extraction: {extractorId: 'downloader'}
-		}
-	},
-	PROMPTS: {
-		downloader: {
-			type: 'download'
+	config: {
+		inputs: {
+			school1: {
+				extraction: {extractorId: 'downloader'}
+			}
+		},
+		extractors: {
+			downloader: {
+				type: 'download'
+			}
 		}
 	}
 }))

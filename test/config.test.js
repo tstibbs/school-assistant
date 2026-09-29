@@ -13,7 +13,7 @@ describe('Config validation', () => {
 			newsletter: {
 				type: 'llm',
 				modelId: 'eu.anthropic.claude-sonnet-4-6',
-				text: 'Extract events from file'
+				prompt: 'Extract events from file'
 			}
 		}
 	}
@@ -35,7 +35,7 @@ describe('Config validation', () => {
 	it('rejects prompt without modelId', () => {
 		const config = {
 			inputs: {school1: {extraction: {extractorId: 'newsletter'}}},
-			extractors: {newsletter: {text: 'Extract events'}}
+			extractors: {newsletter: {prompt: 'Extract events'}}
 		}
 		expect(() => validateConfig(config)).toThrow('Config validation failed')
 	})
@@ -51,7 +51,7 @@ describe('Config validation', () => {
 	it('rejects undefined extractorId reference', () => {
 		const config = {
 			inputs: {school1: {extraction: {extractorId: 'nonexistent'}}},
-			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
 		expect(() => validateConfig(config)).toThrow('The following promptIds were referenced but not defined: nonexistent')
 	})
@@ -61,7 +61,7 @@ describe('Config validation', () => {
 			inputs: {
 				'invalid@name': {extraction: {extractorId: 'newsletter'}}
 			},
-			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
 		expect(() => validateConfig(config)).toThrow('invalid format')
 	})
@@ -72,7 +72,7 @@ describe('Config validation', () => {
 				school_1: {extraction: {extractorId: 'newsletter'}},
 				'school-2': {extraction: {extractorId: 'newsletter'}}
 			},
-			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
 		expect(() => validateConfig(config)).not.toThrow()
 	})
@@ -85,7 +85,7 @@ describe('Config validation', () => {
 					aliases: ['alias1', 'alias2']
 				}
 			},
-			extractors: {newsletter: {type: 'llm', modelId: 'claude', text: 'text'}}
+			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
 		expect(() => validateConfig(config)).not.toThrow()
 	})

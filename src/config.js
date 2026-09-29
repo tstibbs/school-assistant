@@ -6,7 +6,7 @@ import {z} from 'zod'
 const llmExtractorSchema = z.object({
 	type: z.literal('llm'),
 	modelId: z.string(),
-	text: z.string()
+	prompt: z.string()
 })
 const jsonpathExtractorSchema = z.object({
 	type: z.literal('jsonpath'),
@@ -34,10 +34,14 @@ const configSchema = z.object({
 	query: z
 		.object({
 			modelId: z.string(),
-			text: z.string()
+			prompt: z.string()
 		})
 		.optional(),
-	config: z.record(z.any()).optional()
+	global: z
+		.object({
+			pageLimitForAi: z.number()
+		})
+		.optional()
 })
 
 function loadConfig() {
@@ -75,7 +79,3 @@ export function validateConfig(config) {
 }
 
 export const config = loadConfig()
-export const INPUTS = config.inputs
-export const QUERY_CONFIG = config.query
-export const PROMPTS = config.extractors
-export const CONFIG = config.config

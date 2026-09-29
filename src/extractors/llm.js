@@ -1,12 +1,12 @@
 import {extractEventsFromPdf as aiPdfExtract, extractEventsFromText as aiTextExtract} from '../integration/bedrock.js'
 import {translateData} from '../database/translate.js'
 import {extractText as dumbPdfExtract, countPages} from '../formats/pdf.js'
-import {CONFIG} from '../config.js'
+import {config} from '../config.js'
 
 export async function processOneObject(extractorConfig, fileBody) {
 	const pageCount = await countPages(fileBody)
 	let output
-	if (pageCount > CONFIG.pageLimitForAi) {
+	if (pageCount > config.global.pageLimitForAi) {
 		// pages cost around $0.01 per page in claude sonnet, so cost can add up quickly
 		console.log(`High page count (${pageCount}), so falling back to local text extract followed by AI text parsing`)
 		const pageText = await dumbPdfExtract(fileBody)

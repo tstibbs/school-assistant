@@ -1,16 +1,17 @@
 import {describe, expect, it, jest} from '@jest/globals'
 
 jest.unstable_mockModule('../src/config.js', () => ({
-	CONFIG: {},
-	INPUTS: {
-		school1: {
-			extraction: {extractorId: 'json-only'}
-		}
-	},
-	PROMPTS: {
-		'json-only': {
-			type: 'jsonpath',
-			expression: '$.items[0].name'
+	config: {
+		inputs: {
+			school1: {
+				extraction: {extractorId: 'json-only'}
+			}
+		},
+		extractors: {
+			'json-only': {
+				type: 'jsonpath',
+				expression: '$.items[0].name'
+			}
 		}
 	}
 }))

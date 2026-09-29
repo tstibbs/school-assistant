@@ -18,8 +18,10 @@ const defaultMockInputs = {
 let mockInputs = {}
 
 jest.unstable_mockModule('../src/config.js', () => ({
-	...unmockedConfig,
-	INPUTS: mockInputs
+	config: {
+		...unmockedConfig,
+		inputs: mockInputs
+	}
 }))
 
 async function importQueryServiceWithInputs(inputs) {

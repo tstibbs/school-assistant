@@ -1,8 +1,10 @@
 import {jest} from '@jest/globals'
 jest.unstable_mockModule('../../src/config.js', () => ({
-	INPUTS: {
-		school1: {},
-		school2: {}
+	config: {
+		inputs: {
+			school1: {},
+			school2: {}
+		}
 	}
 }))
 

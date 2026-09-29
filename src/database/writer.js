@@ -2,7 +2,7 @@
 
 import {S3Client, GetObjectCommand, PutObjectCommand} from '@aws-sdk/client-s3'
 
-import {INPUTS} from '../config.js'
+import {config} from '../config.js'
 import {DATA_FILE, EVENT_VIEW_FILE, ALL_DATA_DIRECTORY} from './dbConstants.js'
 
 const s3Client = new S3Client()
@@ -31,7 +31,7 @@ export async function updateAllData(bucket) {
 }
 
 export async function writeData(reader, writer) {
-	const dataPromises = Object.keys(INPUTS).map(async inputId => {
+	const dataPromises = Object.keys(config.inputs).map(async inputId => {
 		const jsonString = await reader(inputId)
 		try {
 			const json = JSON.parse(jsonString)

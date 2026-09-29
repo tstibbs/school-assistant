@@ -1,13 +1,13 @@
 import {BedrockRuntimeClient, ConverseCommand} from '@aws-sdk/client-bedrock-runtime'
 
-import {QUERY_CONFIG} from '../config.js'
+import {config} from '../config.js'
 
 const MAX_TOKENS = 2000
 
 const client = new BedrockRuntimeClient()
 
 export async function extractEventsFromText(extractorConfig, fileText) {
-	const {text: promptText, modelId} = extractorConfig
+	const {prompt, modelId} = extractorConfig
 	const conversation = [
 		{
 			role: 'user',
@@ -16,7 +16,7 @@ export async function extractEventsFromText(extractorConfig, fileText) {
 					text: fileText
 				},
 				{
-					text: promptText
+					text: prompt
 				}
 			]
 		}
@@ -34,7 +34,7 @@ export async function extractEventsFromText(extractorConfig, fileText) {
 }
 
 export async function extractEventsFromPdf(extractorConfig, fileBody) {
-	const {text, modelId} = extractorConfig
+	const {prompt, modelId} = extractorConfig
 	const conversation = [
 		{
 			role: 'user',
@@ -49,7 +49,7 @@ export async function extractEventsFromPdf(extractorConfig, fileBody) {
 					}
 				},
 				{
-					text: text
+					text: prompt
 				}
 			]
 		}
@@ -77,7 +77,7 @@ export async function query(prompt) {
 			]
 		}
 	]
-	return await makeRequest(QUERY_CONFIG.modelId, conversation)
+	return await makeRequest(config.query.modelId, conversation)
 }
 
 async function makeRequest(modelId, conversation) {
