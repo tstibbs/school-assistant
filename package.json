@@ -18,6 +18,7 @@
 		"@aws-sdk/client-bedrock-runtime": "^3.1136.0",
 		"@aws-sdk/client-s3": "^3.1136.0",
 		"@aws-sdk/client-sns": "^3.1136.0",
+		"@sparticuz/chromium": "^153.0.0",
 		"@thednp/dommatrix": "^3.1.2",
 		"@tstibbs/cloud-core-utils": "github:tstibbs/cloud-core#path:/aws/utils",
 		"ask-sdk-core": "^2.14.0",
@@ -27,6 +28,7 @@
 		"jsonpath-plus": "^11.0.0",
 		"lodash-es": "^4.18.1",
 		"pdfjs-dist": "^5.5.207",
+		"playwright-core": "^1.63.0",
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {

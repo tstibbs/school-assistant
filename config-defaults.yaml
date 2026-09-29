@@ -1,4 +1,7 @@
 extractors:
+  sway:
+    # no specific config required, so probably only ever need this single instance
+    type: sway
   downloader:
     # no specific config required, so probably only ever need this single instance
     type: download

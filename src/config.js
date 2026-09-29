@@ -15,8 +15,16 @@ const jsonpathExtractorSchema = z.object({
 const downloadExtractorSchema = z.object({
 	type: z.literal('download')
 })
+const swayExtractorSchema = z.object({
+	type: z.literal('sway')
+})
 
-const extractorSchema = z.union([llmExtractorSchema, jsonpathExtractorSchema, downloadExtractorSchema])
+const extractorSchema = z.union([
+	llmExtractorSchema,
+	jsonpathExtractorSchema,
+	downloadExtractorSchema,
+	swayExtractorSchema
+])
 
 const configSchema = z.object({
 	inputs: z
