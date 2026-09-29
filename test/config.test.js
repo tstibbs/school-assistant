@@ -5,7 +5,7 @@ describe('Config validation', () => {
 	const validConfig = {
 		inputs: {
 			school1: {
-				extraction: {extractorId: 'newsletter'},
+				extractors: ['newsletter'],
 				aliases: ['alias1']
 			}
 		},
@@ -34,7 +34,7 @@ describe('Config validation', () => {
 
 	it('rejects prompt without modelId', () => {
 		const config = {
-			inputs: {school1: {extraction: {extractorId: 'newsletter'}}},
+			inputs: {school1: {extractors: ['newsletter']}},
 			extractors: {newsletter: {prompt: 'Extract events'}}
 		}
 		expect(() => validateConfig(config)).toThrow('Config validation failed')
@@ -42,7 +42,7 @@ describe('Config validation', () => {
 
 	it('rejects prompt without text', () => {
 		const config = {
-			inputs: {school1: {extraction: {extractorId: 'newsletter'}}},
+			inputs: {school1: {extractors: ['newsletter']}},
 			extractors: {newsletter: {type: 'llm', modelId: 'claude-sonnet-4-6'}}
 		}
 		expect(() => validateConfig(config)).toThrow('Config validation failed')
@@ -50,7 +50,7 @@ describe('Config validation', () => {
 
 	it('rejects undefined extractorId reference', () => {
 		const config = {
-			inputs: {school1: {extraction: {extractorId: 'nonexistent'}}},
+			inputs: {school1: {extractors: ['nonexistent']}},
 			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
 		expect(() => validateConfig(config)).toThrow('The following promptIds were referenced but not defined: nonexistent')
@@ -59,7 +59,7 @@ describe('Config validation', () => {
 	it('rejects invalid input names', () => {
 		const config = {
 			inputs: {
-				'invalid@name': {extraction: {extractorId: 'newsletter'}}
+				'invalid@name': {extractors: ['newsletter']}
 			},
 			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
@@ -69,8 +69,8 @@ describe('Config validation', () => {
 	it('accepts valid input names with underscores and hyphens', () => {
 		const config = {
 			inputs: {
-				school_1: {extraction: {extractorId: 'newsletter'}},
-				'school-2': {extraction: {extractorId: 'newsletter'}}
+				school_1: {extractors: ['newsletter']},
+				'school-2': {extractors: ['newsletter']}
 			},
 			extractors: {newsletter: {type: 'llm', modelId: 'claude', prompt: 'text'}}
 		}
@@ -81,7 +81,7 @@ describe('Config validation', () => {
 		const config = {
 			inputs: {
 				school1: {
-					extraction: {extractorId: 'newsletter'},
+					extractors: ['newsletter'],
 					aliases: ['alias1', 'alias2']
 				}
 			},

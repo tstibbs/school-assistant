@@ -92,7 +92,7 @@ async function processOneObject(bucket, key) {
 //exported just for tests
 export async function runAllExtractors(inputId, inputData) {
 	const input = config.inputs[inputId]
-	const extractorConfigs = [input.extraction.extractorId].map(extractorId => config.extractors[extractorId])
+	const extractorConfigs = input.extractors.map(extractorId => config.extractors[extractorId])
 	let lastOutput = inputData
 	for (const extractorConfig of extractorConfigs) {
 		const extractor = await extractors[extractorConfig.type]()

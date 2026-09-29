@@ -4,7 +4,7 @@ jest.unstable_mockModule('../src/config.js', () => ({
 	config: {
 		inputs: {
 			school1: {
-				extraction: {extractorId: 'json-only'}
+				extractors: ['json-only']
 			}
 		},
 		extractors: {

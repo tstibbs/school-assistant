@@ -1,4 +1,7 @@
 extractors:
+  downloader:
+    # no specific config required, so probably only ever need this single instance
+    type: download
   newsletter:
     type: llm
     modelId: eu.anthropic.claude-sonnet-4-6

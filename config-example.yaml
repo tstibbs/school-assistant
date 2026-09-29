@@ -1,8 +1,7 @@
-
 inputs:
   school1: # give sensible real name (e.g. 'infants', 'eton', or perhaps a person's name)
-    extraction:
-      extractorId: newsletter # reference by name one of the extractors, either from config-defaults.yaml or add a new extractors in this file
+    extractors:
+      - newsletter # reference extractors by name, either from config-defaults.yaml or add a new extractors in this file
     aliases: # list of other ways the school might be referred to (e.g. by school name or by the name of the child attending)
       - alias1
       - alias2

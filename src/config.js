@@ -23,9 +23,7 @@ const configSchema = z.object({
 		.record(
 			z.string(),
 			z.object({
-				extraction: z.object({
-					extractorId: z.string()
-				}),
+				extractors: z.array(z.string()),
 				aliases: z.array(z.string()).optional()
 			})
 		)
@@ -71,7 +69,8 @@ export function validateConfig(config) {
 
 	// Validate all referenced extractorId are defined
 	const undefinedPrompts = Object.values(config.inputs)
-		.map(input => input.extraction.extractorId)
+		.map(input => input.extractors)
+		.flat()
 		.filter(extractorId => !(extractorId in config.extractors))
 	if (undefinedPrompts.length > 0) {
 		throw new Error(`The following promptIds were referenced but not defined: ${undefinedPrompts.join(', ')}`)
