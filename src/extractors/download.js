@@ -1,4 +1,7 @@
-export async function downloadFromUrl(extractorConfig, urlString) {
+import {FileContent} from './file-content.js'
+
+export async function downloadFromUrl(extractorConfig, data) {
+	const urlString = data.parseJson()
 	const url = urlString.trim()
 	console.log(`Downloading file from URL: ${url}`)
 
@@ -11,5 +14,5 @@ export async function downloadFromUrl(extractorConfig, urlString) {
 	const byteArray = new Uint8Array(buffer)
 
 	console.log(`Successfully downloaded ${byteArray.length} bytes`)
-	return byteArray
+	return new FileContent(byteArray)
 }

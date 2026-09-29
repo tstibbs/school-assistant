@@ -2,8 +2,10 @@ import {extractEventsFromPdf as aiPdfExtract, extractEventsFromText as aiTextExt
 import {translateData} from '../database/translate.js'
 import {extractText as dumbPdfExtract, countPages} from '../formats/pdf.js'
 import {config} from '../config.js'
+import {FileContent} from './file-content.js'
 
-export async function processOneObject(extractorConfig, fileBody) {
+export async function processOneObject(extractorConfig, inputData) {
+	const fileBody = inputData.asBinary()
 	const pageCount = await countPages(fileBody)
 	let output
 	if (pageCount > config.global.pageLimitForAi) {
@@ -18,6 +20,5 @@ export async function processOneObject(extractorConfig, fileBody) {
 	const data = translateData(output)
 
 	console.log(output)
-	console.log(JSON.stringify(data))
-	return data
+	return FileContent.toJsonStringContent(data)
 }

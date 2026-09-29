@@ -5,11 +5,13 @@ import {buildErrorNotifyingLambdaHandler} from '@tstibbs/cloud-core-utils/src/ut
 
 import {updateAllData} from './database/writer.js'
 import {config} from './config.js'
+import {FileContent} from './extractors/file-content.js'
 
 const extractors = {
 	llm: async () => (await import('./extractors/llm.js')).processOneObject,
 	jsonpath: async () => (await import('./extractors/jsonpath.js')).findJsonPath,
-	download: async () => (await import('./extractors/download.js')).downloadFromUrl
+	download: async () => (await import('./extractors/download.js')).downloadFromUrl,
+	sway: async () => (await import('./extractors/sway.js')).fetchContent
 }
 
 const s3Client = new S3Client()
@@ -63,14 +65,14 @@ async function processOneObject(bucket, key) {
 
 	console.log(`File hash changed for ${inputId}, proceeding with extraction`)
 
-	const outputData = await runAllExtractors(inputId, fileBody)
+	const outputData = await runAllExtractors(inputId, new FileContent(fileBody))
 
 	//write this input's data
 	await s3Client.send(
 		new PutObjectCommand({
 			Bucket: bucket,
 			Key: `${inputId}/data.json`,
-			Body: JSON.stringify(outputData),
+			Body: outputData.asString(),
 			ContentType: 'application/json'
 		})
 	)

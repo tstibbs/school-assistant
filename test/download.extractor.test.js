@@ -1,5 +1,7 @@
 import {describe, expect, it, jest} from '@jest/globals'
 
+import {FileContent} from '../src/extractors/file-content.js'
+
 jest.unstable_mockModule('../src/config.js', () => ({
 	config: {
 		inputs: {
@@ -19,14 +21,15 @@ const {runAllExtractors} = await import('../src/extractor-orchestrator.js')
 describe('file download extractor', () => {
 	it('happy path', async () => {
 		const data = 'https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png'
-		const response = await runAllExtractors('school1', data)
-		expect(response).toBeInstanceOf(Uint8Array)
-		expect(response.length).toBeGreaterThan(1000)
+		const response = await runAllExtractors('school1', FileContent.toJsonStringContent(data))
+		expect(response.asBinary().length).toBeGreaterThan(1000)
 		//check for png header
-		expect(Buffer.from(response).subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a')
+		expect(Buffer.from(response.asBinary()).subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a')
 	})
 	it('url not found', async () => {
 		const data = 'https://example.com/invalid'
-		await expect(runAllExtractors('school1', data)).rejects.toThrow('Failed to download file: HTTP 404 Not Found')
+		await expect(runAllExtractors('school1', FileContent.toJsonStringContent(data))).rejects.toThrow(
+			'Failed to download file: HTTP 404 Not Found'
+		)
 	})
 })
