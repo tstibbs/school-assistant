@@ -28,4 +28,4 @@ async function run(inputId) {
 	)
 }
 
-await run('school1')
+await run(process.argv[2]) //pass a school name as the first argument
