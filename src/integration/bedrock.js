@@ -2,7 +2,7 @@ import {BedrockRuntimeClient, ConverseCommand} from '@aws-sdk/client-bedrock-run
 
 import {config} from '../config.js'
 
-const MAX_TOKENS = 2000
+const MAX_TOKENS = 4000
 
 const client = new BedrockRuntimeClient()
 
