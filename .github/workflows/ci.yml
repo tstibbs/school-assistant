@@ -4,22 +4,18 @@ on: [push, pull_request]
 
 env:
   npm_config_engine_strict: true
+  MISE_IDIOMATIC_VERSION_FILE_ENABLE_TOOLS: "node,pnpm"
 
 jobs:
   build:
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 12.5.1
+      - name: Setup mise
+        uses: jdx/mise-action@v5
 
       - run: pnpm ci
 
