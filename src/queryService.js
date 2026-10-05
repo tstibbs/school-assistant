@@ -98,6 +98,46 @@ export class QueryService {
 			return descriptions
 		}
 	}
+
+	/**
+	 * Return freshness info for configured inputs and the combined allData file.
+	 * - For each configured input: looks at `${inputId}/data.json` LastModified
+	 * - Looks at `allData/data.json` LastModified
+	 * Returns an object { allDataLastModified: Date, inputs: { inputId: Date }, isError: boolean }
+	 */
+	async dataFreshness() {
+		const bucket = process.env.BUCKET_NAME
+		const inputs = Object.keys(config.inputs)
+		const inputTimestamps = {}
+		for (const inputId of inputs) {
+			const key = `${inputId}/${'data.json'}`
+			const ts = await this.#reader.getObjectLastModified(key)
+			inputTimestamps[inputId] = ts
+		}
+		const allDataKey = `${'allData'}/${'data.json'}`
+		const allDataTs = await this.#reader.getObjectLastModified(allDataKey)
+		const newestInputTs = Object.values(inputTimestamps).reduce((acc, d) => (d && acc && d > acc ? d : acc || d), null)
+		const allDataTooOld = newestInputTs && allDataTs && newestInputTs > allDataTs
+		return this.#dataFreshnessSpeech(allDataTs, inputTimestamps, allDataTooOld)
+	}
+
+	async #dataFreshnessSpeech(allDataLastModified, inputs, allDataTooOld) {
+		let allDataReport = ''
+		if (!allDataLastModified) {
+			allDataReport += 'I could not find the combined allData file in S3, which indicates an error. '
+		}
+		if (allDataTooOld) {
+			allDataReport += `All data was updated before the most recent input, at ${formatTimestampForSpeech(allDataLastModified)}, which indicates an error. `
+		}
+		const inputsText = Object.entries(inputs)
+			.map(([input, timestamp]) => {
+				const ts = formatTimestampForSpeech(timestamp)
+				return MULTI_INPUT ? `for ${input} at ${ts}` : `at ${ts}`
+			})
+			.join('; ')
+		const inputsReport = `The input data was last updated ${inputsText}.`
+		return `${allDataReport}${inputsReport}`
+	}
 }
 
 function formatDateForSpeech(dateAsString) {
@@ -121,4 +161,13 @@ function formatDateForSpeech(dateAsString) {
 		}
 	}
 	return `${day}${getSuffix(day)} of ${month}`
+}
+
+function formatTimestampForSpeech(date) {
+	if (!date) return 'an unknown time'
+
+	const d = new Date(date)
+	const hours = String(d.getHours()).padStart(2, '0')
+	const minutes = String(d.getMinutes()).padStart(2, '0')
+	return `${hours}:${minutes} on the ${formatDateForSpeech(date)}`
 }

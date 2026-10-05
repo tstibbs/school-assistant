@@ -1,4 +1,4 @@
-import {S3Client, GetObjectCommand} from '@aws-sdk/client-s3'
+import {S3Client, GetObjectCommand, HeadObjectCommand} from '@aws-sdk/client-s3'
 import {DATA_FILE, EVENT_VIEW_FILE, ALL_DATA_DIRECTORY} from './dbConstants.js'
 
 const s3Client = new S3Client()
@@ -23,6 +23,12 @@ export class Reader {
 			new GetObjectCommand({Bucket: this.#bucket, Key: `${ALL_DATA_DIRECTORY}/${fileName}`})
 		)
 		return response.Body.transformToString()
+	}
+
+	async getObjectLastModified(key) {
+		const response = await s3Client.send(new HeadObjectCommand({Bucket: this.#bucket, Key: key}))
+		// LastModified is a Date object if present
+		return response.LastModified
 	}
 
 	getEventsByDate(date) {

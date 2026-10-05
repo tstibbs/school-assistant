@@ -71,3 +71,7 @@ await invokeSkill(dateRequest)
 console.log('\n=== Testing GetEventByNameIntent ===')
 const nameRequest = createIntentRequest('GetEventByNameIntent', {eventName: 'disco'})
 await invokeSkill(nameRequest)
+
+console.log('\n=== Testing DataFreshnessIntentHandler ===')
+const freshnessRequest = createIntentRequest('HowFreshIsDataIntent', {})
+await invokeSkill(freshnessRequest)

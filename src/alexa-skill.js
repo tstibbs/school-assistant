@@ -73,6 +73,29 @@ const GetEventByNameIntentHandler = {
 	}
 }
 
+/**
+ * Handler for asking how fresh the data is
+ * Triggered by utterances such as "how fresh is the data" or "when were you last updated"
+ */
+const HowFreshIsDataIntentHandler = {
+	canHandle(handlerInput) {
+		return (
+			getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+			getIntentName(handlerInput.requestEnvelope) === 'HowFreshIsDataIntent'
+		)
+	},
+	async handle(handlerInput) {
+		const queryService = await loadQueryService()
+		try {
+			const speak = await queryService.dataFreshness()
+			return respondWithInfo(handlerInput, speak)
+		} catch (e) {
+			console.error(e)
+			return respondWithInfo(handlerInput, 'Sorry, I could not determine the data freshness.')
+		}
+	}
+}
+
 const LaunchRequestHandler = {
 	canHandle(handlerInput) {
 		return getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest'
@@ -129,6 +152,7 @@ export const handler = SkillBuilders.custom()
 		LaunchRequestHandler,
 		GetEventsByDateIntentHandler,
 		GetEventByNameIntentHandler,
+		HowFreshIsDataIntentHandler,
 		HelpIntentHandler,
 		CancelAndStopIntentHandler
 	)

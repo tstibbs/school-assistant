@@ -45,6 +45,17 @@
                     ]
                 },
                 {
+                    "name": "HowFreshIsDataIntent",
+                    "samples": [
+                        "how fresh is the data",
+                        "when were you last updated",
+                        "when was the data last updated",
+                        "how recent is the data",
+                        "are the inputs up to date",
+                        "when did you last refresh data"
+                    ]
+                },
+                {
                     "name": "AMAZON.CancelIntent",
                     "samples": []
                 },
